@@ -17,7 +17,7 @@ There are dozens, if not hundreds of factors and assumptions which can go into m
 * Each person interacts with a certain number of people daily (`interaction_circle_count`), and this set of people is different for each person, but doesn't ever change
 * In each of those interactions, an infected person has a chance to infect an uninfected person who isn't immune
 * People get immunity after recovering from the disease (after `total_disease_days` days)
-* When infected, each person has a probability of going into isolation / quarantine (`isolation_ratio` - think of it as the ratio of discovered infected people, as some are asymptomatic, under the assumption that all discovered infected people are quarantined)
+* When infected, each person has a probability of going into isolation / quarantine (`isolation_ratio` - think of it as the ratio of discovered infected people, as some are not tested, under the assumption that all discovered infected people are quarantined)
 * Certain ratio of people are always isolation violators (`isolation_violators_ratio`)
 * Certain ratio of people are always asymptomatic (`asymptomatic_ratio`)
 * Others are asymptomatic for a certain number of days (`asymptomatic_days`)
