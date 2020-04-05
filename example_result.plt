@@ -1,4 +1,6 @@
 set format y "%'.0f"
+set xlabel "Days"
+set ylabel "Population"
 
 plot 	"example_result.csv" using 1:2 title "Live population", \
 	"example_result.csv" using 1:3 title "Infected count", \
