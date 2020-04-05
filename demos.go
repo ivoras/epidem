@@ -5,14 +5,11 @@ import (
 	"math/rand"
 )
 
-/*
- * Spread probability = probability of infection for each encounter between 2 people.
- */
-
 const AlgorithmTypeDefault = 0
 const AlgorithmTypeFaster = 1
 const AlgorithmTypeLudicrous = 2
 
+// Keep this <= 64 bytes to fit in a cache line
 type DiseaseParameters struct {
 	AlgorithmType           uint32  `json:"algorithm_type"`
 	PopulationCount         uint32  `json:"population_count"`                       // Population size
@@ -31,6 +28,10 @@ type DiseaseParameters struct {
 	RDeathNormal            float32 `json:"death_prob_normal"`                      // Death rate with a functioning healthcare system
 	RDeathCollapse          float32 `json:"death_prob_collapse"`                    // Death rate without a functioning healthcare system
 }
+
+/*
+ * Spread probability = probability of infection for each encounter between 2 people.
+ */
 
 var defaultParams = DiseaseParameters{
 	AlgorithmType:           AlgorithmTypeFaster,
@@ -222,7 +223,7 @@ func (w *World) NewDay() {
 }
 
 type WorldStat struct {
-	LiveCount      int32  `json:"live_count"`
+	LiveCount      uint32 `json:"live_count"`
 	InfectedCount  uint32 `json:"infected_count"`
 	DeadCount      uint32 `json:"dead_count"`
 	IsolationCount uint32 `json:"isolation_count"`
