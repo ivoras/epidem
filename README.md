@@ -55,7 +55,7 @@ See the [example_result.csv](example_result.csv) file for an example run. This d
 ## FAQ
 
 * Yes, the simulator gets increasingly slower as the number of infected people grows - it does simulate their actions after all.
-* Yes, it's ridiculously sensitive to starting conditions and choices in implementation. There's a parameter called `algorithm_type` which can be 0, 1 or 2, which siwtches between progressively faster algorithms. The only thing it changes in the simulation is the choice of which fixed set of people a person interacts with - and the results can be dramatically different.
+* Yes, it's sensitive to starting conditions and choices in implementation, but not as much as expected. There's a parameter called `algorithm_type` which can be 0, 1 or 2, which siwtches between progressively faster algorithms. The only thing it changes in the simulation is the choice of which fixed set of people a person interacts with - and the results can be different, but they tend to converge to similar trajectories.
 
 ## How to use it
 
