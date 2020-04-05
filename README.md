@@ -2,7 +2,7 @@
 
 This simulator simulates interactions between hundreds of millions of people the "brute force" numerical way: there's literally state being kept for each and every simulated person. There are probably equations which do this much more efficiently without simulating each individual person. This simulator simulates what's going on with the population day-by-day.
 
-The result is a CSV file outputted to stdout. The CSV data can be graphed:
+The result is a CSV file outputted to stdout. CSV data can be graphed, e.g. with gnuplot:
 
 ![Data plot graphics](example_result.png "Example result plotted on a chart")
 
@@ -50,7 +50,7 @@ The default parameters, at least at the time of this writing, are:
 
 Again, there's a large number of parameters which COULD be simulated, for example if the person is in ICU or not (which would govern the person's infectivity, mortality and its impact on the healthcare system). Another thing to improve would be to have an interval distribution for the number of days people are asympromatic and ill. Forks and patches are welcome ;)
 
-See the [example_result.csv](example_result.csv) file for an example run.
+See the [example_result.csv](example_result.csv) file for an example run. This data was used to create a chart from the top of this page.
 
 ## FAQ
 
