@@ -168,52 +168,55 @@ func (w *World) NewDay() {
 	}
 	// Process each person
 	for i, p := range w.Population {
-		if p.IsAlive() && p.IsInfected() {
-			if uint32(p.DaysInfected) >= w.dParams.TotalDiseaseDays {
-				w.Population[i].Status &^= PERSON_STATUS_INFECTED
-				w.Population[i].Status &^= PERSON_STATUS_IN_ISOLATION
-				w.Population[i].Status |= PERSON_STATUS_IMMUNE
-				continue
+		if !(p.IsAlive() && p.IsInfected()) {
+			// Doesn't concern us
+			continue
+		}
+
+		if uint32(p.DaysInfected) >= w.dParams.TotalDiseaseDays {
+			w.Population[i].Status &^= PERSON_STATUS_INFECTED
+			w.Population[i].Status &^= PERSON_STATUS_IN_ISOLATION
+			w.Population[i].Status |= PERSON_STATUS_IMMUNE
+			continue
+		}
+		if rand.Float32() < rDeath {
+			w.Population[i].Status &^= PERSON_STATUS_ALIVE
+			continue
+		}
+		w.Population[i].DaysInfected++
+		if uint32(w.Population[i].DaysInfected) > w.dParams.AsymptomaticDays && !p.IsAlwaysAsymptomatic() {
+			w.Population[i].Status |= PERSON_STATUS_SYMPTOMATIC
+		}
+		p = w.Population[i]
+		// Assumption: a person always has contact with the same people
+		if w.dParams.AlgorithmType == AlgorithmTypeDefault {
+			// Always a repeatable pseudo-random sequence from the same seed
+			rSource := rand.NewSource(int64(i))
+			r := rand.New(rSource)
+			for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
+				tgt := r.Intn(int(w.dParams.PopulationCount))
+				w.TryInfect(p, &w.Population[tgt])
 			}
-			if rand.Float32() < rDeath {
-				w.Population[i].Status &^= PERSON_STATUS_ALIVE
-				continue
-			}
-			w.Population[i].DaysInfected++
-			if uint32(w.Population[i].DaysInfected) > w.dParams.AsymptomaticDays && !p.IsAlwaysAsymptomatic() {
-				w.Population[i].Status |= PERSON_STATUS_SYMPTOMATIC
-			}
-			p = w.Population[i]
-			// Assumption: a person always has contact with the same people
-			if w.dParams.AlgorithmType == AlgorithmTypeDefault {
-				// Always a repeatable pseudo-random sequence from the same seed
-				rSource := rand.NewSource(int64(i))
-				r := rand.New(rSource)
-				for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
-					tgt := r.Intn(int(w.dParams.PopulationCount))
-					w.TryInfect(p, &w.Population[tgt])
-				}
-			} else if w.dParams.AlgorithmType == AlgorithmTypeFaster {
-				// Home-grown LFSR
-				s := uint32(i)
-				for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
-					b := (s >> 0) ^ (s >> 2) ^ (s >> 6) ^ (s >> 7)
-					s = (s >> 1) | (b << 31)
-					tgt := s % w.dParams.PopulationCount
-					w.TryInfect(p, &w.Population[tgt])
-				}
-			} else if w.dParams.AlgorithmType == AlgorithmTypeLudicrous {
-				// Infects a sequential set of people in the array, but at a random location
-				s := uint32(i)
+		} else if w.dParams.AlgorithmType == AlgorithmTypeFaster {
+			// Home-grown LFSR
+			s := uint32(i)
+			for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
 				b := (s >> 0) ^ (s >> 2) ^ (s >> 6) ^ (s >> 7)
 				s = (s >> 1) | (b << 31)
-				for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
-					tgt := (s + j) % w.dParams.PopulationCount
-					w.TryInfect(p, &w.Population[tgt])
-				}
-			} else {
-				panic(fmt.Sprintf("Unknown algorithm: %d", w.dParams.AlgorithmType))
+				tgt := s % w.dParams.PopulationCount
+				w.TryInfect(p, &w.Population[tgt])
 			}
+		} else if w.dParams.AlgorithmType == AlgorithmTypeLudicrous {
+			// Infects a sequential set of people in the array, but at a random location
+			s := uint32(i)
+			b := (s >> 0) ^ (s >> 2) ^ (s >> 6) ^ (s >> 7)
+			s = (s >> 1) | (b << 31)
+			for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
+				tgt := (s + j) % w.dParams.PopulationCount
+				w.TryInfect(p, &w.Population[tgt])
+			}
+		} else {
+			panic(fmt.Sprintf("Unknown algorithm: %d", w.dParams.AlgorithmType))
 		}
 	}
 }
