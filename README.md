@@ -14,10 +14,10 @@ There are dozens, if not hundreds of factors and assumptions which can go into m
 * There's a finite, static population in the simulator (`population_count`)
 * Every person has the same likelyhood of being infected and consequently dieing as others (this is probably the first thing I'd change if I work on it further)
 * There's an initial number of infected people in the pool (`start_infected`)
-* Each person interacts with a certain number of people daily (`InteractionCircleCount`), and this set of people is different for each person, but doesn't ever change
+* Each person interacts with a certain number of people daily (`interaction_circle_count`), and this set of people is different for each person, but doesn't ever change
 * In each of those interactions, an infected person has a chance to infect an uninfected person who isn't immune
 * People get immunity after recovering from the disease (after `total_disease_days` days)
-* When infected, each person has a probability of going into isolation / quarantine (`isolation_ratio` - think of it as the ratio of detection of infected people, as some are asymptomatic)
+* When infected, each person has a probability of going into isolation / quarantine (`isolation_ratio` - think of it as the ratio of discovered infected people, as some are asymptomatic)
 * Certain ratio of people are always isolation violators (`isolation_violators_ratio`)
 * Certain ratio of people are always asymptomatic (`asymptomatic_ratio`)
 * Others are asymptomatic for a certain number of days (`asymptomatic_days`)
