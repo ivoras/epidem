@@ -18,15 +18,16 @@ type DiseaseParameters struct {
 	CollapseThreshold       uint32  `json:"collapse_threshold"`                     // Health system collapse threshold - collapses if this many people are ill
 	InteractionCircleCount  uint32  `json:"interaction_circle_count"`               // Dumbar's number
 	AlwaysAsymptomaticRatio float32 `json:"asymptomatic_ratio"`                     // Percentage of people who are always asymptomatic
+	IsolationRatio          float32 `json:"isolation_ratio"`                        // Probability than an infected person will go into isolation (quarantine)
 	IsolationViolatorsRatio float32 `json:"isolation_violators_ratio"`              // Percentage of people who will ignore isolation rules
 	AsymptomaticDays        uint32  `json:"asymptomatic_days"`                      // Number of days at which those who are not asymptomatic, look asymptomatic
 	TotalDiseaseDays        uint32  `json:"total_disease_days"`                     // Total days the disease is present in a person
-	RIsolationProb          float32 `json:"spread_rate_isolation"`                  // Spread probability of non-asymptomatic people in isolation
-	RNotIsolationProb       float32 `json:"spread_rate_not_isolation"`              // Spread probability of non-asympromatic people not in isolation
-	RAIsolationProb         float32 `json:"spread_rate_asymptomatic_isolation"`     // Spread probability for always asymptomatic people in isolation
-	RANotIsolationProb      float32 `json:"spread_rate_asymptomatic_not_isolation"` // Spread probability for always asymptomatic people not in isolation
-	RDeathNormal            float32 `json:"death_rate_normal"`                      // Death rate with a functioning healthcare system
-	RDeathCollapse          float32 `json:"death_rate_collapse"`                    // Death rate without a functioning healthcare system
+	RIsolationProb          float32 `json:"spread_prob_isolation"`                  // Spread probability of non-asymptomatic people in isolation
+	RNotIsolationProb       float32 `json:"spread_prob_not_isolation"`              // Spread probability of non-asympromatic people not in isolation
+	RAIsolationProb         float32 `json:"spread_prob_asymptomatic_isolation"`     // Spread probability for always asymptomatic people in isolation
+	RANotIsolationProb      float32 `json:"spread_prob_asymptomatic_not_isolation"` // Spread probability for always asymptomatic people not in isolation
+	RDeathNormal            float32 `json:"death_prob_normal"`                      // Death rate with a functioning healthcare system
+	RDeathCollapse          float32 `json:"death_prob_collapse"`                    // Death rate without a functioning healthcare system
 }
 
 var defaultParams = DiseaseParameters{
@@ -36,6 +37,7 @@ var defaultParams = DiseaseParameters{
 	StartInfected:           1000,
 	InteractionCircleCount:  40,
 	AlwaysAsymptomaticRatio: 0.5,
+	IsolationRatio:          0.9,
 	IsolationViolatorsRatio: 0.1,
 	AsymptomaticDays:        13,
 	TotalDiseaseDays:        25,
@@ -143,7 +145,7 @@ func (w *World) TryInfect(src Person, tgt *Person) {
 	}
 	if rand.Float32() < prob {
 		tgt.Status |= PERSON_STATUS_INFECTED
-		if !tgt.IsIsolationViolator() {
+		if !tgt.IsIsolationViolator() && rand.Float32() < w.dParams.IsolationRatio {
 			tgt.Status |= PERSON_STATUS_IN_ISOLATION
 		}
 	}
@@ -178,13 +180,22 @@ func (w *World) NewDay() {
 			if uint32(w.Population[i].DaysInfected) > w.dParams.AsymptomaticDays && !p.IsAlwaysAsymptomatic() {
 				w.Population[i].Status |= PERSON_STATUS_SYMPTOMATIC
 			}
-			// Assumption: a person always has contact with the same InteractionCircleCount people
 			p = w.Population[i]
-			rSource := rand.NewSource(int64(i))
-			r := rand.New(rSource)
-			for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
-				tgt := r.Intn(int(w.dParams.PopulationCount))
-				w.TryInfect(p, &w.Population[tgt])
+			// Assumption: a person always has contact with the same InteractionCircleCount people
+			if w.dParams.AlgorithmType == AlgorithmTypeDefault {
+				// Always a repeatable pseudo-random sequence from the same seed
+				rSource := rand.NewSource(int64(i))
+				r := rand.New(rSource)
+				for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
+					tgt := r.Intn(int(w.dParams.PopulationCount))
+					w.TryInfect(p, &w.Population[tgt])
+				}
+			} else if w.dParams.AlgorithmType == AlgorithmTypeFaster {
+				// Realize that it doesn't matter if the set of people is randomly located, so they might be nearest neighbours
+				for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
+					tgt := (uint32(i) + j) % w.dParams.InteractionCircleCount
+					w.TryInfect(p, &w.Population[tgt])
+				}
 			}
 		}
 	}
