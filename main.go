@@ -10,7 +10,7 @@ import (
 
 var isPrint = flag.Bool("p", false, "Prints the default values as JSON and exits")
 var loadFile = flag.String("l", "", "Loads parameters from JSON file (see output of -p")
-var randomSeed = flag.Int64("r", 42, "Random seed, for repeatability")
+var randomSeed = flag.Int64("s", 42, "Random seed, for repeatability")
 
 func main() {
 	flag.Parse()
