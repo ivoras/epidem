@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 )
 
@@ -46,7 +47,7 @@ var defaultParams = DiseaseParameters{
 	RAIsolationProb:         0.0001,
 	RANotIsolationProb:      0.001,
 	RDeathNormal:            0.0008, // 0.02 / 25
-	RDeathCollapse:          0.005,  // 0.13 / 25
+	RDeathCollapse:          0.006,  // 0.15 / 25
 }
 
 /*
@@ -191,11 +192,16 @@ func (w *World) NewDay() {
 					w.TryInfect(p, &w.Population[tgt])
 				}
 			} else if w.dParams.AlgorithmType == AlgorithmTypeFaster {
-				// Realize that it doesn't matter if the set of people is randomly located, so they might be nearest neighbours
+				// Home-grown LFSR
+				s := uint32(i)
 				for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
-					tgt := (uint32(i) + j) % w.dParams.InteractionCircleCount
+					b := (s >> 0) ^ (s >> 2) ^ (s >> 6) ^ (s >> 7)
+					s = (s >> 1) | (b << 31)
+					tgt := s % w.dParams.PopulationCount
 					w.TryInfect(p, &w.Population[tgt])
 				}
+			} else {
+				panic(fmt.Sprintf("Unknown algorithm: %d", w.dParams.AlgorithmType))
 			}
 		}
 	}

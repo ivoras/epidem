@@ -20,7 +20,7 @@ There are dozens, if not hundreds of factors and assumptions which can go into m
 * The chance of each infected person dieing depends on if the healthcare system collapsed or not, i.e. there are two probabilities (`death_prob_normal`, `death_prob_collapsed`)
 * There's a threshold in the number of infected people (`collapse_threshold`) which governs is the healthcare system in collapse or not.
 
-Again, there's a large number of parameters which COULD be simulated, for example if the person is in ICU or not (which would govern the person's infectivity, mortality and its impact on the healthcare system), so forks and patches are welcome ;)
+Again, there's a large number of parameters which COULD be simulated, for example if the person is in ICU or not (which would govern the person's infectivity, mortality and its impact on the healthcare system). Another thing to improve would be to have an interval distribution for the number of days people are asympromatic and ill. Forks and patches are welcome ;)
 
 FAQ: Yes, the simulator gets increasingly slower as the number of infected people grows - it does simulate their actions after all.
 

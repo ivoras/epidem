@@ -21,7 +21,7 @@ func main() {
 			panic(err)
 		}
 		fmt.Printf("%s\n", string(param))
-
+		return
 	}
 
 	params := defaultParams
@@ -37,6 +37,7 @@ func main() {
 			fmt.Println(err)
 			return
 		}
+		fmt.Printf("; loaded params from %s\n", *loadFile)
 	}
 
 	rand.Seed(*randomSeed)
@@ -50,7 +51,7 @@ func main() {
 	w := NewWorld(params)
 	for i := 0; ; i++ {
 		st := w.GetStat()
-		fmt.Printf("%4d, %06d, %6d, %6d, %6d, %6d\n", i, st.LiveCount, st.InfectedCount, st.DeadCount, st.IsolationCount, st.ImmuneCount)
+		fmt.Printf("%4d, %8d, %8d, %8d, %8d, %8d\n", i, st.LiveCount, st.InfectedCount, st.DeadCount, st.IsolationCount, st.ImmuneCount)
 		if st.InfectedCount == 0 {
 			break
 		}
