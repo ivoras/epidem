@@ -22,7 +22,10 @@ There are dozens, if not hundreds of factors and assumptions which can go into m
 
 Again, there's a large number of parameters which COULD be simulated, for example if the person is in ICU or not (which would govern the person's infectivity, mortality and its impact on the healthcare system). Another thing to improve would be to have an interval distribution for the number of days people are asympromatic and ill. Forks and patches are welcome ;)
 
-FAQ: Yes, the simulator gets increasingly slower as the number of infected people grows - it does simulate their actions after all.
+FAQ:
+
+* Yes, the simulator gets increasingly slower as the number of infected people grows - it does simulate their actions after all.
+* Yes, it's ridiculously sensitive to starting conditions and choices in implementation. There's a parameter called `algorithm_type` which can be 0, 1 or 2, which siwtches between progressively faster algoritjms. The only thing it changes in the simulation is the choice of which fixed set of people a person interacts with - and the results can be dramatically different.
 
 ## IMPORTANT DISCLAIMER
 

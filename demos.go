@@ -11,6 +11,7 @@ import (
 
 const AlgorithmTypeDefault = 0
 const AlgorithmTypeFaster = 1
+const AlgorithmTypeLudicrous = 2
 
 type DiseaseParameters struct {
 	AlgorithmType           uint32  `json:"algorithm_type"`
@@ -32,7 +33,7 @@ type DiseaseParameters struct {
 }
 
 var defaultParams = DiseaseParameters{
-	AlgorithmType:           AlgorithmTypeDefault,
+	AlgorithmType:           AlgorithmTypeFaster,
 	PopulationCount:         10_000_000,
 	CollapseThreshold:       5000,
 	StartInfected:           1000,
@@ -113,10 +114,11 @@ func NewWorld(dp DiseaseParameters) (w World) {
 		if rand.Float32() < dp.IsolationViolatorsRatio {
 			status |= PERSON_STATUS_ISOLATION_VIOLATOR
 		}
-		if uint32(i) < w.dParams.StartInfected {
-			status |= PERSON_STATUS_INFECTED
-		}
 		w.Population[i].Status = status
+	}
+	for i := uint32(0); i < w.dParams.StartInfected; i++ {
+		tgt := rand.Intn(int(w.dParams.PopulationCount))
+		w.Population[tgt].Status |= PERSON_STATUS_INFECTED
 	}
 	return
 }
@@ -182,7 +184,7 @@ func (w *World) NewDay() {
 				w.Population[i].Status |= PERSON_STATUS_SYMPTOMATIC
 			}
 			p = w.Population[i]
-			// Assumption: a person always has contact with the same InteractionCircleCount people
+			// Assumption: a person always has contact with the same people
 			if w.dParams.AlgorithmType == AlgorithmTypeDefault {
 				// Always a repeatable pseudo-random sequence from the same seed
 				rSource := rand.NewSource(int64(i))
@@ -198,6 +200,15 @@ func (w *World) NewDay() {
 					b := (s >> 0) ^ (s >> 2) ^ (s >> 6) ^ (s >> 7)
 					s = (s >> 1) | (b << 31)
 					tgt := s % w.dParams.PopulationCount
+					w.TryInfect(p, &w.Population[tgt])
+				}
+			} else if w.dParams.AlgorithmType == AlgorithmTypeLudicrous {
+				// Infects a sequential set of people in the array, but at a random location
+				s := uint32(i)
+				b := (s >> 0) ^ (s >> 2) ^ (s >> 6) ^ (s >> 7)
+				s = (s >> 1) | (b << 31)
+				for j := uint32(0); j < w.dParams.InteractionCircleCount; j++ {
+					tgt := (s + j) % w.dParams.PopulationCount
 					w.TryInfect(p, &w.Population[tgt])
 				}
 			} else {
