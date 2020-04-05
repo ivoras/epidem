@@ -27,21 +27,21 @@ The default parameters, at least at the time of this writing, are:
 ```
 {
   "algorithm_type": 1,
-  "population_count": 10000000,
-  "start_infected": 1000,
-  "collapse_threshold": 5000,
-  "interaction_circle_count": 40,
-  "asymptomatic_ratio": 0.5,
-  "isolation_ratio": 0.9,
-  "isolation_violators_ratio": 0.1,
-  "asymptomatic_days": 13,
-  "total_disease_days": 25,
-  "spread_prob_isolation": 0.001,
-  "spread_prob_not_isolation": 0.4,
-  "spread_prob_asymptomatic_isolation": 0.0001,
+  "population_count":                10000000,
+  "start_infected":                      1000,
+  "collapse_threshold":                  5000,
+  "interaction_circle_count":              40,
+  "asymptomatic_ratio":                     0.5,
+  "isolation_ratio":                        0.9,
+  "isolation_violators_ratio":              0.1,
+  "asymptomatic_days":                     13,
+  "total_disease_days":                    25,
+  "spread_prob_isolation":                  0.001,
+  "spread_prob_not_isolation":              0.4,
+  "spread_prob_asymptomatic_isolation":     0.0001,
   "spread_prob_asymptomatic_not_isolation": 0.001,
-  "death_prob_normal": 0.0008,
-  "death_prob_collapse": 0.006
+  "death_prob_normal":                      0.0008,
+  "death_prob_collapse":                    0.006
 }
 ```
 
