@@ -2,7 +2,10 @@
 
 This simulator simulates interactions between hundreds of millions of people the "brute force" numerical way: there's literally state being kept for each and every simulated person. There are probably equations which do this much more efficiently without simulating each individual person. This simulator simulates what's going on with the population day-by-day.
 
-The result is a CSV file outputted to stdout.
+The result is a CSV file outputted to stdout. The CSV data can be graphed:
+
+![Data plot graphics](example_result.png "Example result plotted on a chart")
+
 
 The upper limit on the number of simulated people here is 4 billion. This simulator is designed to save memory at all times, so simulating even 4 billion people should be possible on a 16 GiB system. It probably doesn't make any sense, i.e. there's nothing new to learn from the experiment, to simulate more than a couple of million people.
 
