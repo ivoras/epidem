@@ -22,9 +22,32 @@ There are dozens, if not hundreds of factors and assumptions which can go into m
 * The chance of each infected person dieing depends on if the healthcare system collapsed or not, i.e. there are two probabilities (`death_prob_normal`, `death_prob_collapsed`)
 * There's a threshold in the number of infected people (`collapse_threshold`) which governs is the healthcare system in collapse or not.
 
+The default parameters, at least at the time of this writing, are:
+
+```
+{
+  "algorithm_type": 1,
+  "population_count": 10000000,
+  "start_infected": 1000,
+  "collapse_threshold": 5000,
+  "interaction_circle_count": 40,
+  "asymptomatic_ratio": 0.5,
+  "isolation_ratio": 0.9,
+  "isolation_violators_ratio": 0.1,
+  "asymptomatic_days": 13,
+  "total_disease_days": 25,
+  "spread_prob_isolation": 0.001,
+  "spread_prob_not_isolation": 0.4,
+  "spread_prob_asymptomatic_isolation": 0.0001,
+  "spread_prob_asymptomatic_not_isolation": 0.001,
+  "death_prob_normal": 0.0008,
+  "death_prob_collapse": 0.006
+}
+```
+
 Again, there's a large number of parameters which COULD be simulated, for example if the person is in ICU or not (which would govern the person's infectivity, mortality and its impact on the healthcare system). Another thing to improve would be to have an interval distribution for the number of days people are asympromatic and ill. Forks and patches are welcome ;)
 
-See the [example_results.csv](example_results.csv) file for an example run.
+See the [example_result.csv](example_result.csv) file for an example run.
 
 ## FAQ
 
