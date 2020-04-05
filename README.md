@@ -1,6 +1,6 @@
 # A Tiny Epidemiological Simulator in Go
 
-This simulator simulates interactions between hundreds of millions of people the "brute force" numerical way: there's literally state being kept for each and every simulated person. There are probably equations which do this much more efficiently without simulating each individual person. This simulator simulates what's going on with the population day-by-day.
+This simulator simulates interactions between hundreds of millions of people in a "brute force" numerical way: there's literally state being kept for each and every simulated person. There are probably equations which do this much more efficiently without simulating each individual person. This simulator simulates what's going on with the population day-by-day.
 
 The result is a CSV file outputted to stdout. CSV data can be graphed, e.g. with gnuplot:
 
@@ -17,7 +17,7 @@ There are dozens, if not hundreds of factors and assumptions which can go into m
 * Each person interacts with a certain number of people daily (`interaction_circle_count`), and this set of people is different for each person, but doesn't ever change
 * In each of those interactions, an infected person has a chance to infect an uninfected person who isn't immune
 * People get immunity after recovering from the disease (after `total_disease_days` days)
-* When infected, each person has a probability of going into isolation / quarantine (`isolation_ratio` - think of it as the ratio of discovered infected people, as some are asymptomatic, under the assumption that all discovered infected people are quarantined)
+* When infected, each person has a probability of going into isolation / quarantine (`isolation_ratio` - think of it as the ratio of discovered infected people, as some are not tested, under the assumption that all discovered infected people are quarantined)
 * Certain ratio of people are always isolation violators (`isolation_violators_ratio`)
 * Certain ratio of people are always asymptomatic (`asymptomatic_ratio`)
 * Others are asymptomatic for a certain number of days (`asymptomatic_days`)
