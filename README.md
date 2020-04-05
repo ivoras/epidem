@@ -68,7 +68,7 @@ See the [example_result.csv](example_result.csv) file for an example run. This d
 There are a couple of optional command-line arguments:
 
 * `-p` : Prints out the default simulation parameters in JSON format and exits
-* `-l <filename>` : Loads simulation parameters from a JSON file and exits
+* `-l <filename>` : Loads simulation parameters from a JSON file and runs the simulation
 * `-s <number>` : Sets the pseudo-random number seed, for repeatability (it's 42 by default)
 
 # IMPORTANT DISCLAIMER
