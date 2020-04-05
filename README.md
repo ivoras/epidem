@@ -47,4 +47,4 @@ There are a couple of optional command-line arguments:
 
 # IMPORTANT DISCLAIMER
 
-The author of this tool is NOT AN EPIDEMILOGIST, NOT EVEN A MEDICAL DOCTOR! Do not draw conclusions based on the results of this tool.
+The author of this tool is NOT AN EPIDEMIOLOGIST, NOT EVEN A MEDICAL DOCTOR! Do not draw conclusions based on the results of this tool.
