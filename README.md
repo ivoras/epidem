@@ -1,4 +1,4 @@
-# A Tiny Epidemiological Simulator in Go
+# A Tiny Epidemic Simulator in Go
 
 This simulator simulates interactions between hundreds of millions of people in a "brute force" numerical way: there's literally state being kept for each and every simulated person. There are probably equations which do this much more efficiently without simulating each individual person. This simulator simulates what's going on with the population day-by-day.
 
