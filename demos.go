@@ -185,7 +185,7 @@ func (w *World) NewDay() {
 			continue
 		}
 		w.Population[i].DaysInfected++
-		if uint32(w.Population[i].DaysInfected) > w.dParams.AsymptomaticDays && !p.IsAlwaysAsymptomatic() {
+		if !p.IsSymptomatic() && !p.IsAlwaysAsymptomatic() && uint32(w.Population[i].DaysInfected) > w.dParams.AsymptomaticDays {
 			w.Population[i].Status |= PERSON_STATUS_SYMPTOMATIC
 		}
 		p = w.Population[i]
